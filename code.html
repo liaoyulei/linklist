@@ -1,0 +1,117 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<title>C语言实现</title>
+		<meta charset="utf-8">
+		<style type="text/css">
+			p{
+				color: #0080FF;
+			}
+		</style>
+	</head>
+	<body>
+		<h4>&emsp;&emsp;</h4>
+		<p>//结构体定义</p>
+		<h4>typedef struct Student{</h4>
+		<h4>&emsp;&emsp;unsigned int stuID;</h4>
+		<h4>&emsp;&emsp;char name[4];</h4>
+		<h4>&emsp;&emsp;unsigned short classnum;</h4>
+		<h4>&emsp;&emsp;float score;</h4>
+		<h4>&emsp;&emsp;struct Student *next;</h4>
+		<h4>}Student,*linklist;</h4>
+		<h4>&emsp;&emsp;</h4>
+		<p>//添加节点</p>
+		<h4>void insert_l(linklist &head,linklist s){</h4>
+		<h4>&emsp;&emsp;linklist p = head;</h4>
+		<h4>&emsp;&emsp;if(!head){</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;head = s;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;s->next = NULL;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;return;</h4>
+		<h4>&emsp;&emsp;}</h4>
+		<h4>&emsp;&emsp;if(s->score > head->score || (s->score == head->score && s->stuID < head->stuID)){</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;s->nex t= head;</h4>	
+		<h4>&emsp;&emsp;&emsp;&emsp;head = s;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;return;</h4>
+		<h4>&emsp;&emsp;}</h4>
+		<h4>&emsp;&emsp;while(p->next && (s->score < p->next->score || (s->score == p->next->score && s->stuID > p->next->stuID))){</h4>	
+		<h4>&emsp;&emsp;&emsp;&emsp;p = p->next;</h4>
+		<h4>&emsp;&emsp;}</h4>
+		<h4>&emsp;&emsp;s->next = p->next;</h4>
+		<h4>&emsp;&emsp;p->next = s;</h4>
+		<h4>}</h4>
+		<h4>&emsp;&emsp;</h4>
+		<p>//删除节点</p>
+		<h4>int delete_l(linklist &head,unsigned int stuID){</h4>
+		<h4>&emsp;&emsp;linklist p = head;</h4>
+		<h4>&emsp;&emsp;if(!head){</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;return 0;</h4>
+		<h4>&emsp;&emsp;}</h4>
+		<h4>&emsp;&emsp;if(head->stuID == stuID){</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;head = head->next;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;return 1;</h4>
+		<h4>&emsp;&emsp;}</h4>
+		<h4>&emsp;&emsp;while(p->next){</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;if(stuID == p->next->stuID){</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;p->next = p->next->next;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;return 1;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;}</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;p = p->next;</h4>
+		<h4>&emsp;&emsp;}</h4>
+		<h4>&emsp;&emsp;return 0;</h4>
+		<h4>}</h4>
+		<h4>&emsp;&emsp;</h4>
+		<p>//查找节点</p>
+		<h4>int  search_l(linklist head,unsigned int stuID){</h4>
+		<h4>&emsp;&emsp;linklist p = head;</h4>
+		<h4>&emsp;&emsp;while(p){</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;if(stuID == p->stuID){</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;return 1;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;}</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;p = p->next;</h4>
+		<h4>&emsp;&emsp;}</h4>
+		<h4>&emsp;&emsp;return 0;</h4>
+		<h4>}</h4>
+		<h4>&emsp;&emsp;</h4>
+		<p>//平均成绩</p>
+		<h4>float sum(linklist head){</h4>
+		<h4>&emsp;&emsp;int n = 0;</h4>
+		<h4>&emsp;&emsp;float sum = 0;</h4>
+		<h4>&emsp;&emsp;linklist p = head;</h4>
+		<h4>&emsp;&emsp;while(p){</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;sum += p->score;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;++ n;</h4>
+		<h4>&emsp;&emsp;}</h4>
+		<h4>&emsp;&emsp;return sum / n;</h4>
+		<h4>}</h4>
+		<h4>&emsp;&emsp;</h4>
+		<p>//合并链表</p>
+		<h4>void merge_l(linklist &head1,linklist head2){</h4>
+		<h4>&emsp;&emsp;linklist p1,p2,s;</h4>
+		<h4>&emsp;&emsp;if(!head2){</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;return;</h4>
+		<h4>&emsp;&emsp;}</h4>
+		<h4>&emsp;&emsp;if(!head1){</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;head1 = head2;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;return;</h4>
+		<h4>&emsp;&emsp;}</h4>
+		<h4>&emsp;&emsp;if(head2->score > head1->score || (head2->score == head1->score && head2->stuID < head1->stuID)){</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;s = head2;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;head2 = head2->next;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;s->next = head1;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;head1 = s;</h4>
+		<h4>&emsp;&emsp;}</h4>
+		<h4>&emsp;&emsp;p1 = head1;</h4>
+		<h4>&emsp;&emsp;p2 = head2;</h4>
+		<h4>&emsp;&emsp;while(p2){</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;s = p2;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;while(p1->next && (p2->score < p1->next->score || (p2->score == p1->next->score && p2->stuID > p1->next->stuID))){</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;p1 = p1->next;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;}</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;p2 = p2->next;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;s->next = p1->next;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;p1->next = s;</h4>
+		<h4>&emsp;&emsp;&emsp;&emsp;p1 = p1->next;</h4>
+		<h4>&emsp;&emsp;}</h4>
+		<h4>}</h4>
+	</body>
+</html>

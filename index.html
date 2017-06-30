@@ -1,0 +1,872 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<title>链表操作的演示</title>
+		<meta charset="utf-8">
+		<style type="text/css">
+			.div{
+				padding: 10px;
+				border-radius:25px;
+				background-color: #00FFFF;
+				float: left;
+				height: 80px;
+			}
+			.img{
+				float: left;
+				width: 50px;
+				height: 100px;
+			}
+			.highlight{
+				background-color: #FFA000;
+			}
+			.traveled{
+				background-color: #FFFF40;
+			}
+			.codehighlight{
+				background-color: #000000;
+			}
+			#class1,#class2{
+				clear:both;
+				padding: 20px;
+			}
+			#class3{
+				clear:both;
+				height: 60px;
+			}
+			#div0{
+				background-color: #227700;
+				height: 60px;
+				width: 100%;
+				position: fixed;
+				bottom: 0px;
+				padding: 0px;
+				clear: both;
+			}
+			#div1{
+				position: fixed;
+				bottom: 60px;
+				right: 0px;
+				border-radius:25px;
+				background-color: #227700;
+				color: #FFFFFF;
+				padding: 10px;
+				display: none;
+			}
+			#div2,#div3,#div4,#div5,#div6{
+				padding: 10px;
+				position: fixed;
+				background-color: #000000;
+				color: #FFFFFF;
+				bottom: 115px;
+				display: none;
+			}
+			span{
+				font-family: 黑体;
+				font-size: 20px;
+				color: #FFFFFF;
+				background-color: #000000;
+				padding: 18px;
+				position: fixed;
+			}
+			#span0{
+				left: 50px;
+			}
+			#span1{
+				right: 50px;
+			}
+			#span2,#span3,#span4,#span5,#span6{
+				bottom: 60px;
+				height: 20px;
+				display: none;
+			}
+			#span2,#div2{
+				left: 50px;
+			}
+			#span3,#div3{
+				left: 200px;
+			}
+			#span4,#div4{
+				left: 350px;
+			}
+			#span5,#div5{
+				left: 500px;
+			}
+			#span6,#div6{
+				left: 650px;
+			}
+			button{
+				background-color: #000000;
+				color: #FFFFFF;
+			}
+		</style>
+		<script type="text/javascript" src="jquery.js"></script>
+		<script type="text/javascript">
+			var a=new Array();
+			var head1=null,head2=null,head=null,headnum,i,choose,ans,n;
+			$(document).ready(function(){
+				$("#span0").click(function () {
+					$("#span2,#span3,#span4,#span5,#span6,#span7").slideDown();
+				});
+				$("#span1").click(function () {
+					window.open("code.html");
+				});
+				$("#span2").click(function () {
+					$("#div2").slideDown();
+				});
+				$("#span3").click(function () {
+					$("#div3").slideDown();
+				});
+				$("#span4").click(function () {
+					$("#div4").slideDown();
+				});
+				$("#span5").click(function () {
+					if(head==null){
+						$("#div5").slideDown();
+					}
+					else{
+						for(i=0;i<a.length;++i){
+							a[i].status=0;
+						}
+						headnum=head;
+						draw();
+						sum();
+					}
+				});
+				$("#span6").click(function () {
+					if(head!=null){
+						alert("链表已合并！");
+						$("#span2,#span3,#span4,#span5,#span6,#div2,#div3,#div4,#div5,#div6").slideUp();
+						return;
+					}
+					$("#span2,#span3,#span4,#span5,#span6,#div2,#div3,#div4,#div5,#div6").slideUp();
+					for(i=0;i<a.length;++i){
+						a[i].status=0;
+					}
+					headnum=head1;
+					draw();
+					headnum=head2;
+					draw();
+					$("h1").html("合并创建链表：");
+					$("#div1").slideDown();
+					$("#div1").html('<p id="p0">if(!head2)</p><p id="p1">&emsp;&emsp;return;</p><p id="p2">if(!head1)</p><p id="p3">&emsp;&emsp;head1=head2;</p>');
+					if(head1==null&&head2==null){
+						setTimeout(function () {
+							alert("两班链表为空！");
+							$("#div1").slideUp();
+							$("h1").html("按班级创建链表：");
+						},1000);
+					}
+					else if(head2==null){
+						$("#p0").addClass("codehighlight");
+						setTimeout(function () {
+							$("#p0").removeClass("codehighlight");
+							$("#p1").addClass("codehighlight");
+						},1000);
+						setTimeout(function () {
+							$("#p1").removeClass("codehighlight");
+							draw();
+						},2000);
+						setTimeout(function () {
+							head=headnum=head1;
+							head1=head2=null;
+							$("#class1").empty();
+							$("#class2").empty();
+							draw();
+							$("#div1").slideUp();
+						},3000);
+					}
+					else if(head1==null){
+						a[head2].status=1;
+						$("#p2").addClass("codehighlight");
+						setTimeout(function () {
+							headnum=head2;
+							draw();
+							$("#p2").removeClass("codehighlight");
+							$("#p3").addClass("codehighlight");
+						},1000);
+						setTimeout(function () {
+							$("#p3").removeClass("codehighlight");
+						},2000);
+						setTimeout(function () {
+							head=headnum=head2;
+							head1=head2=null;
+							$("#class1").empty();
+							$("#class2").empty();
+							draw();
+							$("#div1").slideUp();
+						},3000);
+					}
+					else{
+						$("#p0").addClass("codehighlight");
+						setTimeout(function () {
+							a[head2].status=1;
+							headnum=head2;
+							draw();
+							$("#p0").removeClass("codehighlight");
+							$("#p2").addClass("codehighlight");
+						},1000);
+						setTimeout(function () {
+							$("#p2").removeClass("codehighlight");
+							$("#div1").html('<p id="p0">if(!cmp(head2,head1)){</p><p id="p1">&emsp;&emsp;s=head2;</p><p id="p2">&emsp;&emsp;head2=head2->next;</p><p id="p3">&emsp;&emsp;s->next=head1;</p><p id="p4">&emsp;&emsp;head1=s;</p><p id="p5">}</p>');
+							$("#p0").addClass("codehighlight");
+							merge();
+						},2000);
+					}
+				});
+				$("#button2").click(function  () {
+					$("#span2,#span3,#span4,#span5,#span6,#div2,#div3,#div4,#div5,#div6").slideUp();
+					var text="";
+					var object=new Object();
+					object.number=number=parseInt($("#number2").val(),10);
+					object.name=$("#name2").val();
+					object.classnum=(document.getElementsByName("class2")[0].checked)?"1班":"2班";
+					object.score=score=parseFloat($("#score2").val());
+					object.status=1;
+					if(object.number==""||object.number<15001||object.number>15999){
+						text+="学号应在15001~15999之间\n";
+					}
+					if(object.name==""){
+						text+="请输入学生姓名\n";
+					}
+					if(!document.getElementsByName("class2")[0].checked&&!document.getElementsByName("class2")[1].checked){
+						text+="请选择班级\n";
+					}
+					if(object.score==""||object.score<0||object.score>100){
+						text+="成绩应在0~100.0之间\n";
+					}
+					if(text==""){
+						if(head==null){
+							for(i=head1;i!=null;i=a[i].next){
+								a[i].status=0;
+								if(number==a[i].number){
+									alert("出现相同学号，请重新输入！");
+									return;
+								}
+							}
+							for(i=head2;i!=null;i=a[i].next){
+								a[i].status=0;
+								if(number==a[i].number){
+									alert("出现相同学号，请重新输入！");
+									return;
+								}
+							}
+							headnum=head1;
+							draw();
+							headnum=head2;
+							draw();
+							if(object.classnum=="1班"){
+								headnum=head1;
+								choose=1;
+							}
+							else{
+								headnum=head2;
+								choose=2;
+							}
+						}
+						else{
+							for(i=head;i!=null;i=a[i].next){
+								a[i].status=0;
+								if(number==a[i].number){
+									alert("出现相同学号，请重新输入！");
+									return;
+								}
+							}
+							headnum=head;
+							choose=3;
+							draw();
+						}
+						a.push(object);
+						$("#div1").slideDown();
+						$("#div1").html('<p id="p1">if(!head||!cmp(s,head)){</p><p id="p2">&emsp;&emsp;s->next=head;</p><p id="p3">&emsp;&emsp;head=s;</p><p id="p4">}</p>');
+						$("#p1").addClass("codehighlight");
+						insert();
+					}
+					else{
+						text+="请重新输入！";
+						alert(text);
+					}
+				});
+				$("#button3").click(function  () {
+					$("#span2,#span3,#span4,#span5,#span6,#div2,#div3,#div4,#div5,#div6").slideUp();
+					number=parseInt($("#number3").val(),10);
+					if(number<15001||number>15999){
+						alert("学号应在15001~15999之间，请重新输入！");
+						return;
+					}
+					for(i=0;i<a.length;++i){
+						a[i].status=0;
+					}
+					if(head==null){
+						headnum=head1;
+						draw();
+						headnum=head2;
+						draw();
+						choose=1;
+						headnum=head1;
+					}
+					else{
+						choose=3;
+						headnum=head;
+						draw();
+					}
+					$("#div1").slideDown();
+					delete_l();
+				});
+				$("#button4").click(function () {
+					$("#span2,#span3,#span4,#span5,#span6,#div2,#div3,#div4,#div5,#div6").slideUp();
+					number=parseInt($("#number4").val(),10);
+					if(number<15001||number>15999){
+						alert("学号应在15001~15999之间，请重新输入！");
+						return;
+					}
+					for(i=0;i<a.length;++i){
+						a[i].status=0;
+					}
+					if(head==null){
+						headnum=head1;
+						draw();
+						headnum=head2;
+						draw();
+						choose=1;
+						headnum=head1;
+					}
+					else{
+						choose=3;
+						headnum=head;
+						draw();
+					}
+					$("#div1").slideDown();
+					$("#div1").html('<p id="p0">while(p){</p><p id="p1">&emsp;&emsp;if(stuID==p->stuID)</p><p id="p2">&emsp;&emsp;&emsp;&emsp;break;</p><p id="p3">&emsp;p=p->next;</p><p id="p4">}</p>');
+					search();
+				});
+				$("#button5").click(function () {
+					$("#span2,#span3,#span4,#span5,#span6,#div2,#div3,#div4,#div5,#div6").slideUp();
+					if(!document.getElementsByName("class5")[0].checked&&!document.getElementsByName("class5")[1].checked){
+						alert("请选择班级！");
+						return;
+					}
+					for(i=0;i<a.length;++i){
+						a[i].status=0;
+					}
+					headnum=head1;
+					draw();
+					headnum=head2;
+					draw();
+					headnum=document.getElementsByName("class5")[0].checked?head1:head2;
+					sum();
+				});
+			});
+			function draw () {
+				var locate,text,j;
+				if(head==null){
+					if(head1==head2){
+						$("#class1").empty();
+						$("#class2").empty();
+						return;
+					}
+					locate=headnum==head1?"#class1":"#class2";
+				}
+				else{
+					locate="#class1";
+				}
+				$(locate).empty();
+				for(j=headnum;j!=null;j=a[j].next){
+					if(j!=headnum){
+						$(locate).append('<div><img class="img" src="jiantou.jpg"></div>');
+					}
+					text='<div id="'+j+'" class="div">学号：'+a[j].number+'<br >姓名：'+a[j].name+'<br >班级：'+a[j].classnum+'<br >成绩：'+a[j].score+'</div>'
+					$(locate).append(text);
+					text="#"+j;
+					if(a[j].status==1){
+						$(text).addClass("highlight");
+					}
+					else if(a[j].status==2){
+						$(text).addClass("traveled");
+					}
+				}
+			}
+			function insertEnd () {
+				$("#p0").removeClass("codehighlight");
+				$("#p1").removeClass("codehighlight");
+				$("#p2").addClass("codehighlight");
+				setTimeout(function  () {
+					$("#p2").removeClass("codehighlight");
+					$("#p3").addClass("codehighlight");
+				},1000);
+				setTimeout(function  () {
+					$("#p3").removeClass("codehighlight");
+					draw();
+				},2000);
+				setTimeout(function  () {
+					$("#div1").slideUp();
+				},3000);
+			}
+			function insertCircle () {
+				if(a[i].next==null||score>a[a[i].next].score||(score==a[a[i].next].score&&number<a[a[i].next].number)){
+					a[i].status=2;
+					a[a.length-1].next=a[i].next;
+					a[i].next=a.length-1;
+					insertEnd();
+					clearInterval(flag);			
+				}
+				else{
+					setTimeout(function  () {
+						$("#p0").removeClass("codehighlight");
+						$("#p1").addClass("codehighlight");
+					},0);
+					setTimeout(function  () {
+						$("#p1").removeClass("codehighlight");
+						$("#p0").addClass("codehighlight");
+						draw();
+					},1000);
+					a[i].status=2;
+					i=a[i].next;
+					a[i].status=1;
+				}
+			}
+			function insert () {
+				if(headnum==null){
+					headnum=a.length-1;
+					a[a.length-1].next=null;
+					switch(choose){
+						case 1:head1=headnum;break;
+						case 2:head2=headnum;break;
+						case 3:head=headnum;break;
+					}
+					setTimeout(function  () {
+						$("#p1").removeClass("codehighlight");
+						$("#p2").addClass("codehighlight");
+					},1000);
+					setTimeout(function  () {
+						$("#p2").removeClass("codehighlight");
+						$("#p3").addClass("codehighlight");
+					},2000);
+					setTimeout(function  () {
+						$("#p3").removeClass("codehighlight");
+						draw();
+					},3000);
+					setTimeout(function () {
+						$("#div1").slideUp();
+					},4000);
+				}
+				else if(score>a[headnum].score||(score==a[headnum].score&&number<a[headnum].number)){
+					a[a.length-1].next=headnum;
+					headnum=a.length-1;
+					switch(choose){
+						case 1:head1=headnum;break;
+						case 2:head2=headnum;break;
+						case 3:head=headnum;break;
+					}
+					$("#p1").addClass("codehighlight");
+					setTimeout("insertEnd()",1000);
+				}
+				else{
+					$("#p1").addClass("codehighlight");
+					setTimeout(function  () {
+						$("#p1").removeClass("codehighlight");
+						$("#div1").html('<p id="p0">while(p->next&&cmp(s,p->next))</p><p id="p1">&emsp;&emsp;p=p->next;</p><p id="p2">s->next=p->next;</p><p id="p3">p->next=s;</p>');
+						$("#p0").addClass("codehighlight");
+						draw();
+					},1000);
+					i=headnum;
+					a[i].status=1;
+					flag=setInterval("insertCircle()",2000);
+				}	
+			}
+			function deleteEnd () {
+				$("#p1").removeClass("codehighlight");
+				$("#p2").addClass("codehighlight");
+				setTimeout(function  () {
+					$("#p2").removeClass("codehighlight");
+					draw();
+				},1000);
+				setTimeout(function  () {
+					$("#div1").slideUp();
+					if(head==null){
+						$("h1").html("按班级创建链表：");
+					}
+				},2000);
+			}
+			function deleteCircle () {
+				if(a[i].next==null){
+					clearInterval(flag);
+					a[i].status=2;
+					draw();
+					if(choose==1){
+						headnum=head2;
+						choose=2;
+						delete_l();
+					}
+					else{
+						alert("查无此人！");
+						$("#div1").slideUp();
+					}
+				}
+				else if(number==a[a[i].next].number){
+					$("#p0").removeClass("codehighlight");
+					$("#p1").addClass("codehighlight");
+					clearInterval(flag);
+					setTimeout(function () {
+						a[i].status=2;
+						a[i].next=a[a[i].next].next;
+						deleteEnd();
+					},1000);	
+				}
+				else{
+					$("#p0").removeClass("codehighlight");
+					$("#p1").addClass("codehighlight");
+					setTimeout(function  () {
+						$("#p1").removeClass("codehighlight");
+						$("#p3").addClass("codehighlight");
+					},1000);
+					setTimeout(function  () {
+						$("#p3").removeClass("codehighlight");
+						$("#p0").addClass("codehighlight");
+						a[i].status=2;
+						i=a[i].next;
+						a[i].status=1;
+						draw();
+					},2000);
+				}
+			}
+			function delete_l () {
+				$("#div1").html('<p id="p1">if(stuID==head->stuID)</p><p id="p2">&emsp;&emsp;head=head->next;</p>');
+				$("#p1").addClass("codehighlight");
+				if(headnum==null){
+					if(choose==1){
+						choose=2;
+						headnum=head2;
+						delete_l();
+					}
+					else{
+						setTimeout(function () {
+							alert("查无此人！");
+							$("#div1").slideUp();
+						},1000);
+					}
+				}
+				else if(number==a[headnum].number){
+					a[headnum].status=1;
+					draw();
+					headnum=a[headnum].next;
+					switch(choose){
+						case 1:head1=headnum;break;
+						case 2:head2=headnum;break;
+						case 3:head=headnum;break;
+					}
+					setTimeout("deleteEnd()",1000);
+				}
+				else{
+					$("#p1").addClass("codehighlight");
+					i=headnum;
+					a[i].status=1;
+					draw();
+					setTimeout(function  () {
+						$("#p1").removeClass("codehighlight");
+						$("#div1").html('<p id="p0">while(p->next){</p><p id="p1">&emsp;&emsp;if(stuID==p->next->stuID)</p><p id="p2">&emsp;&emsp;&emsp;&emsp;p->next=p->next->next;</p><p id="p3">&emsp;&emsp;p=p->next;</p><p id="p4">}</p>');
+					},1000);
+					setTimeout(function () {
+						$("#p0").addClass("codehighlight");
+					},2000);
+					flag=setInterval("deleteCircle()",3000);
+				}
+			}
+			function searchCircle () {
+				if(i==null){
+					clearInterval(flag);
+					$("#p0").removeClass("codehighlight");
+					if(choose==1){
+						headnum=head2;
+						choose=2;
+						search();
+					}
+					else{
+						alert("查无此人！");
+						$("#div1").slideUp();
+					}
+				}
+				else if(number==a[i].number){
+					clearInterval(flag);
+					setTimeout(function  () {
+						$("#p0").removeClass("codehighlight");
+						$("#p1").addClass("codehighlight");
+					},0);
+					setTimeout(function  () {
+						$("#p1").removeClass("codehighlight");
+						$("#p2").addClass("codehighlight");
+					},1000);
+					setTimeout(function  () {
+						$("#p2").removeClass("codehighlight");
+						$("#div1").slideUp();
+					},2000);
+				}
+				else{
+					setTimeout(function  () {
+						$("#p0").removeClass("codehighlight");
+						$("#p1").addClass("codehighlight");
+					},0);
+					setTimeout(function  () {
+						$("#p1").removeClass("codehighlight");
+						$("#p3").addClass("codehighlight");
+					},1000);
+					setTimeout(function  () {
+						$("#p3").removeClass("codehighlight");
+						$("#p0").addClass("codehighlight");
+						draw();
+					},2000);
+					a[i].status=2;
+					i=a[i].next;
+					a[i].status=1;
+				}
+			}
+			function search () {
+				if(headnum==null){
+					$("#p0").addClass("codehighlight");
+					if(choose==1){
+						choose=2;
+						headnum=head2;
+						search();
+					}
+					else{
+						setTimeout(function () {
+							alert("查无此人！");
+							$("#div1").slideUp();
+						},1000);
+					}
+				}
+				else{
+					setTimeout(function () {
+						$("#p0").addClass("codehighlight");
+						i=headnum;
+						a[i].status=1;
+						draw();
+					},1500);
+					flag=setInterval("searchCircle()",3000);
+				}
+			}
+			function sumCircle () {
+				var text;
+				if(i==null){
+					$("#p0").removeClass("codehighlight");
+					clearInterval(flag);
+					ans=Math.round(ans*10/n)/10;
+					alert("平均成绩为："+ans+"分！");
+					$("#div1").slideUp();
+				}
+				else{
+					setTimeout(function  () {
+						$("#p0").removeClass("codehighlight");
+						$("#p1").addClass("codehighlight");
+					},0);
+					setTimeout(function  () {
+						$("#p1").removeClass("codehighlight");
+						$("#p2").addClass("codehighlight");
+						text="sum:&emsp;"+ans;
+						$("#p4").html(text);
+					},1000);
+					setTimeout(function  () {
+						$("#p2").removeClass("codehighlight");
+						$("#p0").addClass("codehighlight");
+						text="&emsp;n:&emsp;"+n;
+						$("#p5").html(text);
+						draw();
+					},2000);
+					ans+=a[i].score;
+					++n;
+					a[i].status=2;
+					i=a[i].next;
+					a[i].status=1;
+				}
+			}
+			function sum () {
+				$("#div1").slideDown();
+				$("#div1").html('<p id="p0">while(p){</p><p id="p1">&emsp;&emsp;sum+=p->score;</p><p id="p2">&emsp;&emsp;++n;</p><p id="p3">}</p><p></p><p id="p4">sum:&emsp;0</p><p id="p5">&emsp;n:&emsp;0</p>');
+				if(headnum==null){
+					setTimeout(function () {
+						alert("学生人数为0！");
+						$("#div1").slideUp();
+					},1000);
+				}
+				else{
+					setTimeout(function () {
+						$("#p0").addClass("codehighlight");
+						draw();
+					},1500);
+					ans=n=0;
+					i=headnum;
+					a[i].status=1;
+					flag=setInterval("sumCircle()",3000);
+				}
+			}
+			function mergeEnd1 () {
+				head=headnum=head1;
+				head1=head2=null;
+				$("#class1").empty();
+				$("#class2").empty();
+				draw();
+				setTimeout(function () {
+					$("#div1").slideUp();
+				},1000);
+			}
+			function mergeEnd2 () {
+				setTimeout(function  () {
+					$("#p2").removeClass("codehighlight");
+					$("#p4").addClass("codehighlight");
+				},0);
+				setTimeout(function  () {
+					$("#p4").removeClass("codehighlight");
+					$("#p5").addClass("codehighlight");
+				},1000);
+				setTimeout(function  () {
+					$("#p5").removeClass("codehighlight");
+					$("#p6").addClass("codehighlight");
+				},2000);
+				setTimeout(function  () {
+					$("#p6").removeClass("codehighlight");
+					$("#p7").addClass("codehighlight");
+					headnum=head1;
+					draw();
+					headnum=head2;
+					draw();
+				},3000);
+				setTimeout(function  () {
+					$("#p7").removeClass("codehighlight");
+					$("#p0").removeClass("codehighlight");
+					mergeCircle1();
+				},4000);
+			}
+			function mergeCircle2 () {
+				if(a[i].next==null||a[choose].score>a[a[i].next].score||(a[choose].score==a[a[i].next].score&&a[choose].number<a[a[i].next].number)){
+					clearInterval(flag);
+					head2=a[choose].next;
+					a[i].status=2;
+					a[choose].next=a[i].next;
+					a[i].next=choose;
+					i=a[i].next;
+					mergeEnd2();
+				}
+				else{
+					a[i].status=2;
+					i=a[i].next;
+					a[i].status=1;
+					setTimeout(function  () {
+						$("#p2").removeClass("codehighlight");
+						$("#p3").addClass("codehighlight");
+					},0);
+					setTimeout(function  () {
+						$("#p3").removeClass("codehighlight");
+						$("#p2").addClass("codehighlight");
+						headnum=head1;
+						draw();
+					},1000);
+				}
+			}
+			function mergeCircle1 () {
+				if(head2==null){
+					setTimeout("mergeEnd1()",1000);
+					return;
+				}
+				a[head2].status=1;
+				headnum=head2;
+				draw();
+				choose=head2;
+				setTimeout(function  () {
+					$("#p0").removeClass("codehighlight");
+					$("#p1").addClass("codehighlight");
+				},0);
+				setTimeout(function  () {
+					$("#p1").removeClass("codehighlight");
+					$("#p2").addClass("codehighlight");
+					headnum=head1;
+					draw();
+				},1000);
+				flag=setInterval("mergeCircle2()",2000);
+			}
+			function merge () {
+				choose=head2;
+				a[choose].status=1;
+				draw();
+				if(a[head2].score>a[head1].score||(a[head2].score==a[head1].score&&a[head2].number<a[head1].number)){
+					head2=a[head2].next;
+					a[choose].next=head1;
+					head1=choose;
+					setTimeout(function () {
+						$("#p0").removeClass("codehighlight");
+						$("#p1").addClass("codehighlight");
+					},1000);
+					setTimeout(function () {
+						$("#p1").removeClass("codehighlight");
+						$("#p2").addClass("codehighlight");
+					},2000);
+					setTimeout(function () {
+						$("#p2").removeClass("codehighlight");
+						$("#p3").addClass("codehighlight");
+					},3000);
+					setTimeout(function () {
+						headnum=head1;
+						draw();
+						headnum=head2;
+						draw();
+						$("#p3").removeClass("codehighlight");
+						$("#p4").addClass("codehighlight");
+					},4000);
+					setTimeout(function () {
+						$("#p4").removeClass("codehighlight");
+						$("#div1").html('<p id="p0">while(p2){</p><p id="p1">&emsp;&emsp;s=p2;</p><p id="p2">&emsp;&emsp;while(p1->next&&cmp(s,p1->next))</p><p id="p3">&emsp;&emsp;&emsp;&emsp;p1=p1->next;</p><p id="p4">&emsp;&emsp;p2=p2->next;</p><p id="p5">&emsp;&emsp;s->next=p1->next;</p><p id="p6">&emsp;&emsp;p1->next=s;</p><p id="p7">&emsp;&emsp;p1=p1->next;</p><p id="p8">}</p>');
+						$("#p0").addClass("codehighlight");
+						i=head1;
+						a[i].status=1;
+						mergeCircle1();
+					},5000);
+				}
+				else{
+					setTimeout(function () {
+						$("#p0").removeClass("codehighlight");
+						$("#div1").html('<p id="p0">while(p2){</p><p id="p1">&emsp;&emsp;s=p2;</p><p id="p2">&emsp;&emsp;while(p1->next&&cmp(s,p1->next))</p><p id="p3">&emsp;&emsp;&emsp;&emsp;p1=p1->next;</p><p id="p4">&emsp;&emsp;p2=p2->next;</p><p id="p5">&emsp;&emsp;s->next=p1->next;</p><p id="p6">&emsp;&emsp;p1->next=s;</p><p id="p7">&emsp;&emsp;p1=p1->next;</p><p id="p8">}</p>');
+						$("#p0").addClass("codehighlight");
+						i=head1;
+						a[i].status=1;
+						mergeCircle1();
+					},1000);
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<h1>按班级创建链表：</h1>
+		<div id="class1"></div>
+		<div id="class2"></div>
+		<div id="class3"></div>
+		<div id="div2">
+			学号：<input type="number" id="number2" min="15001" max="15999"><br >
+			姓名：<input type="text" id="name2"><br >
+			班级：<input type="radio" name="class2" value="1班">1班
+			<input type="radio" name="class2" value="2班">2班<br >
+			成绩:<input type="number" step="0.1" id="score2" min="0.0" max="100.0">
+			<button id="button2">Go</button>
+		</div>
+		<div id="div3">
+			学号：<input type="number" id="number3" min="15001" max="15999">
+			<button id="button3">Go</button>
+		</div>
+		<div id="div4">
+			学号：<input type="number" id="number4" min="15001" max="15999">
+			<button id="button4">Go</button>
+		</div>
+		<div id="div5">
+			<input type="radio" name="class5" value="1">1班
+			<input type="radio" name="class5" value="2">2班
+			<button id="button5">Go</button>
+		</div>
+		<span id="span2">添加节点</span>
+		<span id="span3">删除节点</span>
+		<span id="span4">查找节点</span>
+		<span id="span5">平均成绩</span>
+		<span id="span6">合并链表</span>
+		<div id="div1"></div>
+		<div id="div0">
+			<span id="span0">START HERE</span>
+			<span id="span1">&emsp;CODE&emsp;</span>
+		</div>
+	</body>
+</html>
